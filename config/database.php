@@ -35,9 +35,9 @@ return [
 
     'connections' => [
         'mongodb' => [
-            'driver' => 'mongodb',
-            'dsn' => env('DB_URI', 'mongodb+srv://ppmktbaguser:7e5GrTby%25arqB1z8jDs%25@cluster0.fjyw1.mongodb.net/ppmktbagdb?retryWrites=true&w=majority'),
-            'database' => 'ppmktbagdb',
+            'driver' => env('DB_CONNECTION'),
+            'dsn' => env('DB_URI', 'mongodb+srv://' . env('DB_USERNAME') . ':' . env('DB_PASSWORD') . '@' . env('DB_HOST') . '/' . env('DB_DATABASE') . '?retryWrites=true&w=majority'),
+            'database' => env('DB_DATABASE'),
         ],
     ],
 
@@ -71,7 +71,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [
