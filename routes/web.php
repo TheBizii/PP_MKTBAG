@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\AdsController;
+use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PagesController;
+use App\Http\Controllers\UsersController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,7 +18,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+//Route::resource('ads', AdsController::class);
+//Route::get('/', [ X::class, "index" ]);
+Route::get('/login', [ PagesController::class, "login" ]);
+Route::get('/register', [ PagesController::class, "register" ]);
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Auth::routes();
+
+//Route::get('/home', [HomeController::class, 'index'])->name('home');
+//Route::resource('users', UsersController::class);
