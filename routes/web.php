@@ -1,10 +1,7 @@
 <?php
 
-use App\Http\Controllers\AdsController;
-use App\Http\Controllers\CommentsController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\PagesController;
-use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 //Route::resource('ads', AdsController::class);
-//Route::get('/', [ X::class, "index" ]);
+Route::get('/', [ MapController::class, "index" ]);
 Route::get('/login', [ PagesController::class, "login" ]);
 Route::get('/register', [ PagesController::class, "register" ]);
 
