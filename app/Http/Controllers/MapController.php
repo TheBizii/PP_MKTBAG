@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Estate;
+use App\Models\Road;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -38,7 +39,8 @@ class MapController extends Controller
         //$locations = DB::table('locations')->get();
         //return view('gmaps',compact('locations'));
         $estate = Estate::All();
-        return view('map.index')->with('estate', $estate);
+        $road = Road::All();
+        return view('map.index')->with('estate', $estate)->with('road', $road);
     }
 
     /**
