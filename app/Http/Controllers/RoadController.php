@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
-use App\Models\Estate;
+use App\Models\Road;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class EstatesController extends Controller
+class RoadController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -27,6 +25,6 @@ class EstatesController extends Controller
      */
     public function index()
     {
-        return Estate::all();
+        return Road::all();
     }
 }

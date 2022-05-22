@@ -13,10 +13,13 @@
                         <script type="text/javascript">
                             console.log(ol)
                             const estates = {!! $estate !!}[0];
-                            const vectorSource = new ol.source.Vector({
+                            const roads = {!! $road !!}[0];
+                            const estatesSource = new ol.source.Vector({
                                 features: new ol.format.GeoJSON().readFeatures(estates),
                             });
-                            console.log(vectorSource)
+                            const roadsSource = new ol.source.Vector({
+                                features: new ol.format.GeoJSON().readFeatures(roads),
+                            });
 
                             const image = new ol.style.Circle({
                                 radius: 5,
@@ -88,13 +91,18 @@
                                 }),
                             };
 
-                            const vectorLayer = new ol.layer.Vector({
-                                source: vectorSource,
+                            const estatesLayer = new ol.layer.Vector({
+                                source: estatesSource,
                                 style: (feature) => {
                                     return styles[feature.getGeometry().getType()]
                                 },
                             });
-                            console.log(vectorLayer)
+                            const roadsLayer = new ol.layer.Vector({
+                                source: roadsSource,
+                                style: (feature) => {
+                                    return styles[feature.getGeometry().getType()]
+                                },
+                            });
 
                             const map = new ol.Map({
                                 target: 'map',
@@ -109,7 +117,8 @@
                                     new ol.layer.Tile({
                                         source: new ol.source.OSM(),
                                     }),
-                                    vectorLayer
+                                    estatesLayer,
+                                    roadsLayer
                                 ],
                                 view: new ol.View({
                                     projection: 'EPSG:4326',
