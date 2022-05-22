@@ -118,7 +118,7 @@
                                         source: new ol.source.OSM(),
                                     }),
                                     estatesLayer,
-                                    roadsLayer
+                                    roadsLayer,
                                 ],
                                 view: new ol.View({
                                     projection: 'EPSG:4326',
