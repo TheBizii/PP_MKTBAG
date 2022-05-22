@@ -133,7 +133,7 @@
                 <div class="col-md-auto">
                     <h1>Vreme</h1>
                     @foreach($weather['original'] as $forecastDay)
-                        <p><b>{{ $forecastDay['date'] }}</b></p>
+                        <b>{{ $forecastDay['date'] }}</b><br>
                         <img src="{{ $forecastDay['icon'] }}">
                         <p>Max: {{ $forecastDay['maxTemp'] }}°C</p>
                         <p>Min: {{ $forecastDay['minTemp'] }}°C</p>
