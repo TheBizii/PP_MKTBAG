@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use App\Models\Estate;
+use App\Models\Geojson2;
 use App\Models\Road;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
@@ -43,10 +43,12 @@ class MapController extends Controller
         //return view('gmaps',compact('locations'));
         $estate = Estate::All();
         $road = Road::All();
+        $geojson2 = Geojson2::All();
         return view('map.index', [
             'estate' => $estate,
             'weather' => $weather,
-            'road' => $road
+            'road' => $road,
+            'geojson2' => $geojson2
         ]);
     }
 
