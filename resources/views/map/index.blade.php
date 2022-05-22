@@ -135,8 +135,10 @@
                     @foreach($weather['original'] as $forecastDay)
                         <p><b>{{ $forecastDay['date'] }}</b></p>
                         <img src="{{ $forecastDay['icon'] }}">
-                        <p>Max: {{ $forecastDay['maxTemp'] }}</p>
-                        <p>Min: {{ $forecastDay['minTemp'] }}</p>
+                        <p>Max: {{ $forecastDay['maxTemp'] }}°C</p>
+                        <p>Min: {{ $forecastDay['minTemp'] }}°C</p>
+                        <p>Možnost padavin: {{ $forecastDay['chanceOfRain'] }}%</p>
+                        <p>Vlažnost: {{ $forecastDay['humidity'] }}%</p>
                     @endforeach
                 </div>
             </div>

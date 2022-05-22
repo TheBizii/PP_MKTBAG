@@ -26,6 +26,8 @@ class WeatherController extends Controller
             $day['date'] = $forecastDay['date'];
             $day['maxTemp'] = $forecastDay['day']['maxtemp_c'];
             $day['minTemp'] = $forecastDay['day']['mintemp_c'];
+            $day['chanceOfRain'] = $forecastDay['day']['daily_chance_of_rain'];
+            $day['humidity'] = $forecastDay['day']['avghumidity'];
             $day['icon'] = $forecastDay['day']['condition']['icon'];
             array_push($forecastDays, $day);
         }
