@@ -131,7 +131,13 @@
                     </div>
                 </div>
                 <div class="col-md-auto">
-                    <h1>Some text</h1>
+                    <h1>Vreme</h1>
+                    @foreach($weather['original'] as $forecastDay)
+                        <p><b>{{ $forecastDay['date'] }}</b></p>
+                        <img src="{{ $forecastDay['icon'] }}">
+                        <p>Max: {{ $forecastDay['maxTemp'] }}</p>
+                        <p>Min: {{ $forecastDay['minTemp'] }}</p>
+                    @endforeach
                 </div>
             </div>
         </div>
