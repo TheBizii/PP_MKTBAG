@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected string $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -44,7 +44,7 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -52,20 +52,20 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'name' => ['required', 'string', 'max:255' ],
-            'surname' => ['required', 'string', 'max:255' ],
-            'phone' => ['nullable','regex:/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/','min:10'],
-            'gender' => ['nullable','string', 'in:male,female,undefined/non-binary'],
-            'address' => ['nullable','string', 'max:255'],
-            'bday' => ['nullable','date'],
+            'name' => ['required', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
+            'phone' => ['nullable', 'regex:/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/', 'min:10'],
+            'gender' => ['nullable', 'string', 'in:male,female,undefined/non-binary'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'bday' => ['nullable', 'date'],
         ]);
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
-     * @return \App\Models\User
+     * @param array $data
+     * @return User
      */
     protected function create(array $data)
     {
@@ -77,7 +77,7 @@ class RegisterController extends Controller
             'phone' => $data['phone'],
             'gender' => $data['gender'],
             'address' => $data['address'],
-            'bday' => $data['bday'],
+            'bday' => $data['bday']
         ]);
     }
 }

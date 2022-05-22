@@ -11,23 +11,105 @@
                     <div>
                         <div id="map" style="width:1000px; height:800px;"></div>
                         <script type="text/javascript">
-                            const map = new OpenLayers.Map("map", {
-                                controls: [
-                                    new OpenLayers.Control.Navigation(),
-                                    new OpenLayers.Control.ScaleLine(),
-                                    new OpenLayers.Control.MousePosition(),
-                                ],
-                                projection: new OpenLayers.Projection("EPSG:900913"),
-                                displayProjection: new OpenLayers.Projection("EPSG:4326")
+                            console.log(ol)
+                            const estates = {!! $estate !!}[0];
+                            const vectorSource = new ol.source.Vector({
+                                features: new ol.format.GeoJSON().readFeatures(estates),
                             });
-                            const mapnik = new OpenLayers.Layer.OSM("OpenStreetMap (mapnik)");
-                            map.addLayer(mapnik);
-                            const lonLat = new OpenLayers.LonLat(15.645, 46.55)
-                                .transform(
-                                    new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-                                    map.getProjectionObject() // to Spherical Mercator Projection
-                                );
-                            map.setCenter(lonLat, 14)
+                            console.log(vectorSource)
+
+                            const image = new ol.style.Circle({
+                                radius: 5,
+                                fill: null,
+                                stroke: new ol.style.Stroke({color: 'red', width: 1}),
+                            });
+                            const styles = {
+                                'Point': new ol.style.Style({
+                                    image: image,
+                                }),
+                                'LineString': new ol.style.Style({
+                                    stroke: new ol.style.Stroke({
+                                        color: 'green',
+                                        width: 1,
+                                    }),
+                                }),
+                                'MultiLineString': new ol.style.Style({
+                                    stroke: new ol.style.Stroke({
+                                        color: 'green',
+                                        width: 1,
+                                    }),
+                                }),
+                                'MultiPoint': new ol.style.Style({
+                                    image: image,
+                                }),
+                                'MultiPolygon': new ol.style.Style({
+                                    stroke: new ol.style.Stroke({
+                                        color: 'yellow',
+                                        width: 1,
+                                    }),
+                                    fill: new ol.style.Fill({
+                                        color: 'rgba(255, 255, 0, 0.1)',
+                                    }),
+                                }),
+                                'Polygon': new ol.style.Style({
+                                    stroke: new ol.style.Stroke({
+                                        color: 'blue',
+                                        lineDash: [4],
+                                        width: 3,
+                                    }),
+                                    fill: new ol.style.Fill({
+                                        color: 'rgba(0, 0, 255, 0.1)',
+                                    }),
+                                }),
+                                'GeometryCollection': new ol.style.Style({
+                                    stroke: new ol.style.Stroke({
+                                        color: 'magenta',
+                                        width: 2,
+                                    }),
+                                    fill: new ol.style.Fill({
+                                        color: 'magenta',
+                                    }),
+                                    image: new ol.style.Circle({
+                                        radius: 10,
+                                        fill: null,
+                                        stroke: new ol.style.Stroke({
+                                            color: 'magenta',
+                                        }),
+                                    }),
+                                }),
+                                'Circle': new ol.style.Style({
+                                    stroke: new ol.style.Stroke({
+                                        color: 'red',
+                                        width: 2,
+                                    }),
+                                    fill: new ol.style.Fill({
+                                        color: 'rgba(255,0,0,0.2)',
+                                    }),
+                                }),
+                            };
+
+                            const vectorLayer = new ol.layer.Vector({
+                                source: vectorSource,
+                                style: (feature) => {
+                                    return styles[feature.getGeometry().getType()]
+                                },
+                            });
+                            console.log(vectorLayer)
+
+                            const map = new ol.Map({
+                                target: 'map',
+                                layers: [
+                                    new ol.layer.Tile({
+                                        source: new ol.source.OSM(),
+                                    }),
+                                    vectorLayer
+                                ],
+                                view: new ol.View({
+                                    center: [2051004.645, 2461100.55],
+                                    zoom: 5,
+                                }),
+                            });
+                            //(15.645, 46.55)
                         </script>
                     </div>
                 </div>
