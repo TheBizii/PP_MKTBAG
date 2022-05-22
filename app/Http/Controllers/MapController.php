@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 
 class MapController extends Controller
 {
@@ -36,11 +37,17 @@ class MapController extends Controller
      */
     public function index()
     {
+        $request = Request::create('/api/weather');
+        $weather = (array) Route::dispatch($request);
         //$locations = DB::table('locations')->get();
         //return view('gmaps',compact('locations'));
         $estate = Estate::All();
         $road = Road::All();
-        return view('map.index')->with('estate', $estate)->with('road', $road);
+        return view('map.index', [
+            'estate' => $estate,
+            'weather' => $weather,
+            'road' => $road
+        ]);
     }
 
     /**
