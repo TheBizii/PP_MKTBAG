@@ -44,11 +44,11 @@
                                 }),
                                 'MultiPolygon': new ol.style.Style({
                                     stroke: new ol.style.Stroke({
-                                        color: 'yellow',
+                                        color: 'rgba(0,0,255, 0.3)',
                                         width: 1,
                                     }),
                                     fill: new ol.style.Fill({
-                                        color: 'rgba(255, 255, 0, 0.1)',
+                                        color: 'rgba(0, 0, 255, 0.1)',
                                     }),
                                 }),
                                 'Polygon': new ol.style.Style({
@@ -98,6 +98,13 @@
 
                             const map = new ol.Map({
                                 target: 'map',
+                                /*controls: [
+                                    new ol.control.Control.Navigation(),
+                                    new ol.control.Control.ScaleLine(),
+                                    new ol.control.Control.MousePosition(),
+                                ],*/
+                                projection: new ol.proj.Projection("EPSG:900913"),
+                                displayProjection: new ol.proj.Projection("EPSG:4326"),
                                 layers: [
                                     new ol.layer.Tile({
                                         source: new ol.source.OSM(),
@@ -105,8 +112,9 @@
                                     vectorLayer
                                 ],
                                 view: new ol.View({
-                                    center: [2051004.645, 2461100.55],
-                                    zoom: 5,
+                                    projection: 'EPSG:4326',
+                                    center: [15.645, 46.55],
+                                    zoom: 13,
                                 }),
                             });
                             //(15.645, 46.55)
