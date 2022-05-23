@@ -11,11 +11,11 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav me-auto">
+            <!--<ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link mx-2" href="/ads/create"><i class="fas fa-plus-circle pe-2"></i>Create ad</a>
                 </li>
-            </ul>
+            </ul>-->
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">
