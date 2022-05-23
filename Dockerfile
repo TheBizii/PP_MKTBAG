@@ -1,4 +1,5 @@
 FROM php:8.1-cli
+
 RUN apt-get update -y && apt-get install -y libmcrypt-dev zip unzip && pecl install mongodb && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && echo "extension=mongodb.so" >> /usr/local/etc/php/php.ini && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -8,6 +9,8 @@ WORKDIR /app
 COPY . /app
 
 #RUN php -i
+RUN composer global require laravel/installer
+RUN composer update
 RUN composer install
 
 EXPOSE 8000
