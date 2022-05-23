@@ -15,11 +15,6 @@
                 <li class="nav-item">
                     <a class="nav-link mx-2" href="/ads/create"><i class="fas fa-plus-circle pe-2"></i>Create ad</a>
                 </li>
-                @if (isset(\Illuminate\Support\Facades\Auth::user()->is_admin))
-                    <li class="nav-item">
-                        <a class="nav-link mx-2" href="/users/create"><i class="fas fa-plus-circle pe-2"></i>Create user</a>
-                    </li>
-                @endif
             </ul>
 
             <!-- Right Side Of Navbar -->
