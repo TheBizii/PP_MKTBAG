@@ -16,9 +16,11 @@
                             const roads = {!! $road !!}[0];
                             const estatesSource = new ol.source.Vector({
                                 features: new ol.format.GeoJSON().readFeatures(estates),
+                                transition: 0
                             });
                             const roadsSource = new ol.source.Vector({
                                 features: new ol.format.GeoJSON().readFeatures(roads),
+                                transition: 0
                             });
 
                             const image = new ol.style.Circle({
@@ -106,11 +108,11 @@
 
                             const map = new ol.Map({
                                 target: 'map',
-                                /*controls: [
-                                    new ol.control.Control.Navigation(),
-                                    new ol.control.Control.ScaleLine(),
-                                    new ol.control.Control.MousePosition(),
-                                ],*/
+                                /*controls:[
+                                    new ol.Control.Navigation(),
+                                    new ol.Control.PanZoomBar(),
+                                    new ol.Control.LayerSwitcher(),
+                                    new ol.Control.Attribution()],*/
                                 projection: new ol.proj.Projection("EPSG:900913"),
                                 displayProjection: new ol.proj.Projection("EPSG:4326"),
                                 layers: [
