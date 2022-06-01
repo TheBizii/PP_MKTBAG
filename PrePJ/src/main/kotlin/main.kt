@@ -1,8 +1,6 @@
 package ppmktbag
 
 import java.io.File
-import java.io.InputStream
-import java.util.LinkedList
 
 const val EOF_SYMBOL = -1
 const val ERROR_STATE = 0
@@ -32,7 +30,7 @@ object Example : Automaton {
   private val values: Array<String> = Array(numberOfStates) {""}
 
   private fun setTransition(from: Int, symbol: Char, to: Int) {
-    transitions[from][symbol.toInt()] = to
+    transitions[from][symbol.code] = to
   }
 
   private fun setTransition(from: Int, symbols: IntRange, to: Int) {
@@ -541,73 +539,17 @@ object Example : Automaton {
   }
 }
 
-data class Token(val value: String, val lexeme: String, val startRow: Int, val startColumn: Int)
-
-class Scanner(private val automaton: Automaton, private val stream: InputStream) {
-  private var state = automaton.startState
-  private var last: Int? = null
-  private var buffer = LinkedList<Byte>()
-  private var row = 1
-  private var column = 1
-
-  private fun updatePosition(symbol: Int) {
-    if (symbol == NEWLINE) {
-      row += 1
-      column = 1
-    } else {
-      column += 1
-    }
-  }
-
-  private fun getValue(): String {
-    var symbol = last ?: stream.read()
-    state = automaton.startState
-
-    while (true) {
-      updatePosition(symbol)
-
-      val nextState = automaton.next(state, symbol)
-      if (nextState == ERROR_STATE) {
-        if (automaton.finalStates.contains(state)) {
-          last = symbol
-          return automaton.value(state)
-        } else throw Error("Invalid pattern at ${row}:${column}")
-      }
-      state = nextState
-      buffer.add(symbol.toByte())
-      symbol = stream.read()
-    }
-  }
-
-  fun eof(): Boolean =
-    last == EOF_SYMBOL
-
-  fun getToken(): Token? {
-    if (eof()) return null
-
-    val startRow = row
-    val startColumn = column
-    buffer.clear()
-
-    val value = getValue()
-    return if (value == SKIP_VALUE)
-      getToken()
-    else
-      Token(value, String(buffer.toByteArray()), startRow, startColumn)
-  }
-}
-
 fun printTokens(scanner: Scanner) {
   val token = scanner.getToken()
-  if (token != null) {
-    print("${token.value}(\"${token.lexeme}\") ")
-    printTokens(scanner)
-  }
+  print("${token.value}(\"${token.lexeme}\") ")
+  printTokens(scanner)
 }
 
 fun main(args: Array<String>) {
-  for (file in args) {
-    val scanner = Scanner(Example, File(file).inputStream())
-    printTokens(scanner)
+  val debug = if (args.size > 1) {
+    args[1].toBoolean();
+  } else {
+    false
   }
+  Scanner(Example, File(args[0]).inputStream(), debug)
 }
