@@ -20,10 +20,11 @@ interface Automaton {
 }
 
 object Example : Automaton {
-  override val states = setOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33)
+  override val states = (1..75).toSet()
   override val alphabet = 0 .. 255
   override val startState = 1
-  override val finalStates = setOf(2, 4, 5, 7, 8, 11, 13, 15, 17, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33)
+  override val finalStates = setOf(2, 5, 6, 14, 15, 21, 22, 26, 27, 30, 31, 35, 36, 42, 44, 45, 46, 47, 48, 49, 50, 52,
+    54, 56, 57, 58, 59, 60, 61, 66, 72, 73, 74, 75)
 
   private val numberOfStates = states.maxOrNull()!! + 1
   private val numberOfSymbols = alphabet.maxOrNull()!! + 1
@@ -109,6 +110,19 @@ object Example : Automaton {
 
     setTransition(1, 'a', 57)
     setTransition(57, 's', 58)
+
+    setTransition(1, 'F', 62)
+    setTransition(62, 'l', 63)
+    setTransition(63, 'o', 64)
+    setTransition(64, 'a', 65)
+    setTransition(65, 't', 66)
+
+    setTransition(1, 'S', 67)
+    setTransition(67, 't', 68)
+    setTransition(68, 'r', 69)
+    setTransition(69, 'i', 70)
+    setTransition(70, 'n', 71)
+    setTransition(71, 'g', 72)
     /* END OF RESERVED KEYWORDS */
 
     /* SYMBOLS */
@@ -188,6 +202,11 @@ object Example : Automaton {
     setTransition(4, 'z', 61)
     setTransition(4, 48..57, 61)
     setTransition(4, '_', 61)
+    // city[a-zA-Z0-9_]+
+    setTransition(5, 65..90, 61)
+    setTransition(5, 97..122, 61)
+    setTransition(5, 48..57, 61)
+    setTransition(5, '_', 61)
     // v[^a]riables
     setTransition(6, 65..90, 61)
     setTransition(6, 98..122, 61)
@@ -234,28 +253,288 @@ object Example : Automaton {
     setTransition(13, 116..122, 61)
     setTransition(13, 48..57, 61)
     setTransition(13, '_', 61)
+    // variables[a-zA-Z0-9_]+
+    setTransition(14, 65..90, 61)
+    setTransition(14, 97..122, 61)
+    setTransition(14, 48..57, 61)
+    setTransition(14, '_', 61)
     // e[^s]tates
     setTransition(15, 65..90, 61)
+    setTransition(15, 97..114, 61)
+    setTransition(15, 116..122, 61)
+    setTransition(15, 48..57, 61)
+    setTransition(15, '_', 61)
+    // es[^t]ates
+    setTransition(16, 65..90, 61)
+    setTransition(16, 97..115, 61)
+    setTransition(16, 117..122, 61)
+    setTransition(16, 48..57, 61)
+    setTransition(16, '_', 61)
+    // est[^a]tes
+    setTransition(17, 65..90, 61)
+    setTransition(17, 98..122, 61)
+    setTransition(17, 48..57, 61)
+    setTransition(17, '_', 61)
+    // esta[^t]es
+    setTransition(18, 65..90, 61)
+    setTransition(18, 97..115, 61)
+    setTransition(18, 117..122, 61)
+    setTransition(18, 48..57, 61)
+    setTransition(18, '_', 61)
+    // estat[^e]s
+    setTransition(19, 65..90, 61)
+    setTransition(19, 97..100, 61)
+    setTransition(19, 102..122, 61)
+    setTransition(19, 48..57, 61)
+    setTransition(19, '_', 61)
+    // estate[^s]
+    setTransition(20, 65..90, 61)
+    setTransition(20, 97..114, 61)
+    setTransition(20, 116..122, 61)
+    setTransition(20, 48..57, 61)
+    setTransition(20, '_', 61)
+    // estates[a-zA-Z0-9_]+
+    setTransition(21, 65..90, 61)
+    setTransition(21, 97..122, 61)
+    setTransition(21, 48..57, 61)
+    setTransition(21, '_', 61)
+    // r[^o]ads
+    setTransition(22, 65..90, 61)
+    setTransition(22, 97..110, 61)
+    setTransition(22, 112..122, 61)
+    setTransition(22, 48..57, 61)
+    setTransition(22, '_', 61)
+    // ro[^a]ds
+    setTransition(23, 65..90, 61)
+    setTransition(23, 98..122, 61)
+    setTransition(23, 48..57, 61)
+    setTransition(23, '_', 61)
+    // roa[^d]s
+    setTransition(24, 65..90, 61)
+    setTransition(24, 97..99, 61)
+    setTransition(24, 101..122, 61)
+    setTransition(24, 48..57, 61)
+    setTransition(24, '_', 61)
+    // road[^s]
+    setTransition(25, 65..90, 61)
+    setTransition(25, 97..114, 61)
+    setTransition(25, 116..122, 61)
+    setTransition(25, 48..57, 61)
+    setTransition(25, '_', 61)
+    // roads[a-zA-Z0-9_]+
+    setTransition(26, 65..90, 61)
+    setTransition(26, 97..122, 61)
+    setTransition(26, 48..57, 61)
+    setTransition(26, '_', 61)
+    // L[^i]ne
+    setTransition(27, 65..90, 61)
+    setTransition(27, 97..104, 61)
+    setTransition(27, 106..122, 61)
+    setTransition(27, 48..57, 61)
+    setTransition(27, '_', 61)
+    // Li[^n]e
+    setTransition(28, 65..90, 61)
+    setTransition(28, 97..109, 61)
+    setTransition(28, 111..122, 61)
+    setTransition(28, 48..57, 61)
+    setTransition(28, '_', 61)
+    // Lin[^e]
+    setTransition(29, 65..90, 61)
+    setTransition(29, 97..100, 61)
+    setTransition(29, 102..122, 61)
+    setTransition(29, 48..57, 61)
+    setTransition(29, '_', 61)
+    // Line[a-zA-Z0-9_]+
+    setTransition(30, 65..90, 61)
+    setTransition(30, 97..122, 61)
+    setTransition(30, 48..57, 61)
+    setTransition(30, '_', 61)
+    // P[^o]int
+    setTransition(31, 65..90, 61)
+    setTransition(31, 97..110, 61)
+    setTransition(31, 112..122, 61)
+    setTransition(31, 48..57, 61)
+    setTransition(31, '_', 61)
+    // Po[^i]nt
+    setTransition(32, 65..90, 61)
+    setTransition(32, 97..104, 61)
+    setTransition(32, 106..122, 61)
+    setTransition(32, 48..57, 61)
+    setTransition(32, '_', 61)
+    // Poi[^n]t
+    setTransition(33, 65..90, 61)
+    setTransition(33, 97..109, 61)
+    setTransition(33, 111..122, 61)
+    setTransition(33, 48..57, 61)
+    setTransition(33, '_', 61)
+    // Poin[^t]
+    setTransition(34, 65..90, 61)
+    setTransition(34, 97..115, 61)
+    setTransition(34, 117..122, 61)
+    setTransition(34, 48..57, 61)
+    setTransition(34, '_', 61)
+    // Point[a-zA-Z0-9_]+
+    setTransition(35, 65..90, 61)
+    setTransition(35, 97..122, 61)
+    setTransition(35, 48..57, 61)
+    setTransition(35, '_', 61)
+    // P[^o]lygon
+    setTransition(36, 65..90, 61)
+    setTransition(36, 97..110, 61)
+    setTransition(36, 112..122, 61)
+    setTransition(36, 48..57, 61)
+    setTransition(36, '_', 61)
+    // Po[^l]ygon
+    setTransition(37, 65..90, 61)
+    setTransition(37, 97..107, 61)
+    setTransition(37, 109..122, 61)
+    setTransition(37, 48..57, 61)
+    setTransition(37, '_', 61)
+    // Pol[^y]gon
+    setTransition(38, 65..90, 61)
+    setTransition(38, 97..120, 61)
+    setTransition(38, 'z', 61)
+    setTransition(38, 48..57, 61)
+    setTransition(38, '_', 61)
+    // Poly[^g]on
+    setTransition(39, 65..90, 61)
+    setTransition(39, 97..102, 61)
+    setTransition(39, 104..122, 61)
+    setTransition(39, 48..57, 61)
+    setTransition(39, '_', 61)
+    // Polyg[^o]n
+    setTransition(40, 65..90, 61)
+    setTransition(40, 97..110, 61)
+    setTransition(40, 112..122, 61)
+    setTransition(40, 48..57, 61)
+    setTransition(40, '_', 61)
+    // Polygo[^n]
+    setTransition(41, 65..90, 61)
+    setTransition(41, 97..109, 61)
+    setTransition(41, 111..122, 61)
+    setTransition(41, 48..57, 61)
+    setTransition(41, '_', 61)
+    // Polygon[a-zA-Z0-9_]+
+    setTransition(42, 65..90, 61)
+    setTransition(42, 97..122, 61)
+    setTransition(42, 48..57, 61)
+    setTransition(42, '_', 61)
+    // a[^s]
+    setTransition(57, 65..90, 61)
+    setTransition(57, 97..114, 61)
+    setTransition(57, 116..122, 61)
+    setTransition(57, 48..57, 61)
+    setTransition(57, '_', 61)
+    // as[a-zA-Z0-9_]+
+    setTransition(58, 65..90, 61)
+    setTransition(58, 97..122, 61)
+    setTransition(58, 48..57, 61)
+    setTransition(58, '_', 61)
+    // F[^l]oat
+    setTransition(62, 65..90, 61)
+    setTransition(62, 97..107, 61)
+    setTransition(62, 109..122, 61)
+    setTransition(62, 48..57, 61)
+    setTransition(62, '_', 61)
+    // Fl[^o]at
+    setTransition(63, 65..90, 61)
+    setTransition(63, 97..110, 61)
+    setTransition(63, 112..122, 61)
+    setTransition(63, 48..57, 61)
+    setTransition(63, '_', 61)
+    // Flo[^a]t
+    setTransition(64, 65..90, 61)
+    setTransition(64, 98..122, 61)
+    setTransition(64, 48..57, 61)
+    setTransition(64, '_', 61)
+    // Floa[^t]
+    setTransition(65, 65..90, 61)
+    setTransition(65, 97..115, 61)
+    setTransition(65, 117..122, 61)
+    setTransition(65, 48..57, 61)
+    setTransition(65, '_', 61)
+    // Float[a-zA-Z0-9_]+
+    setTransition(66, 65..90, 61)
+    setTransition(66, 97..122, 61)
+    setTransition(66, 48..57, 61)
+    setTransition(66, '_', 61)
+    // S[^t]ring
+    setTransition(67, 65..90, 61)
+    setTransition(67, 97..115, 61)
+    setTransition(67, 117..122, 61)
+    setTransition(67, 48..57, 61)
+    setTransition(67, '_', 61)
+    // St[^r]ing
+    setTransition(68, 65..90, 61)
+    setTransition(68, 97..113, 61)
+    setTransition(68, 115..122, 61)
+    setTransition(68, 48..57, 61)
+    setTransition(68, '_', 61)
+    // Str[^i]ng
+    setTransition(69, 65..90, 61)
+    setTransition(69, 97..104, 61)
+    setTransition(69, 106..122, 61)
+    setTransition(69, 48..57, 61)
+    setTransition(69, '_', 61)
+    // Stri[^n]g
+    setTransition(70, 65..90, 61)
+    setTransition(70, 97..109, 61)
+    setTransition(70, 111..122, 61)
+    setTransition(70, 48..57, 61)
+    setTransition(70, '_', 61)
+    // Strin[^g]
+    setTransition(71, 65..90, 61)
+    setTransition(71, 97..102, 61)
+    setTransition(71, 104..122, 61)
+    setTransition(71, 48..57, 61)
+    setTransition(71, '_', 61)
+    // String[a-zA-Z0-9_]+
+    setTransition(72, 65..90, 61)
+    setTransition(72, 97..122, 61)
+    setTransition(72, 48..57, 61)
+    setTransition(72, '_', 61)
     /* END OF VARIABLE IDENTIFIER */
 
-    setValue(2, "float")
-    setValue(4, "float")
-    setValue(23, "variable")
-    setValue(24, "variable")
-    setValue(5, "plus")
-    setValue(25, "minus")
-    setValue(26, "times")
-    setValue(27, "divide")
-    setValue(28, "pow")
-    setValue(29, "lparen")
-    setValue(30, "rparen")
-    setValue(31, "semi")
-    setValue(7, "assign")
-    setValue(11, "for")
-    setValue(13, "do")
-    setValue(15, "done")
-    setValue(17, "to")
-    setValue(22, "write")
+    /* SKIP VALUES */
+    setTransition(1, ' ', 73)
+    setTransition(1, '\t', 74)
+    setTransition(1, '\n', 75)
+    setTransition(73, ' ', 73)
+    setTransition(74, '\t', 74)
+    setTransition(75, '\n', 75)
+    /* END OF SKIP VALUES */
+
+    setValue(2, "var")
+    setValue(5, "city")
+    setValue(6, "var")
+    setValue(14, "variables")
+    setValue(15, "var")
+    setValue(21, "estates")
+    setValue(22, "var")
+    setValue(26, "roads")
+    setValue(27, "var")
+    setValue(30, "line")
+    setValue(31, "var")
+    setValue(35, "point")
+    setValue(36, "var")
+    setValue(42, "polygon")
+    setValue(44, "arrow")
+    setValue(45, "lcparen")
+    setValue(46, "rcparen")
+    setValue(47, "lsparen")
+    setValue(48, "rsparen")
+    setValue(49, "comma")
+    setValue(50, "float")
+    setValue(52, "float")
+    setValue(54, "string")
+    setValue(56, "string")
+    setValue(57, "var")
+    setValue(58, "as")
+    setValue(59, "lparen")
+    setValue(60, "rparen")
+    setValue(61, "var")
+    setValue(66, "rk_float")
+    setValue(72, "rk_string")
   }
 }
 
