@@ -4,6 +4,11 @@ import java.io.InputStream
 import java.util.*
 
 data class Token(val value: String, val lexeme: String, val startRow: Int, val startColumn: Int)
+data class Variable(var name: String, var value: Any?)
+data class City(var name: String = "", var roads: MutableList<Road>, var estates: MutableList<Estate>)
+data class Point(var x: Float, var y: Float)
+data class Road(var name: String, var points: MutableList<Point>)
+data class Estate(var name: String, var points: MutableList<Point>)
 
 class Scanner(private val automaton: Automaton, private val stream: InputStream/*, private val debug: Boolean*/) {
   private var state = automaton.startState
@@ -26,11 +31,18 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
 
   private fun start() {
     //if (debug) printMethod("start")
-    cityDef()
-    defintionBlocks()
+    val city = City("", mutableListOf(), mutableListOf())
+    val roads = mutableListOf<Road>()
+    val estates = mutableListOf<Estate>()
+    cityDef(city)
+    defintionBlocks(roads, estates)
+    city.roads.addAll(roads)
+    city.estates.addAll(estates)
+
+    println(city)
   }
 
-  private fun cityDef() {
+  private fun cityDef(city: City) {
     //if (debug) printMethod("cityDef")
     if (token.value != "city") {
       throw Error("reject")
@@ -43,6 +55,7 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
     if (token.value != "string") {
       throw Error("reject")
     }
+    city.name = token.lexeme
     nextToken()
     if (token.value != "comma") {
       throw Error("reject")
@@ -50,14 +63,15 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
     nextToken()
   }
 
-  private fun defintionBlocks() {
+  private fun defintionBlocks(roads: MutableList<Road>, estates: MutableList<Estate>) {
     //if (debug) printMethod("definitionBlocks")
-    variablesBlock()
-    roadsBlock()
-    estatesBlock()
+    val outVariables = mutableListOf<Variable>()
+    variablesBlock(outVariables)
+    roadsBlock(roads, outVariables)
+    estatesBlock(estates, outVariables)
   }
 
-  private fun variablesBlock() {
+  private fun variablesBlock(outVariables: MutableList<Variable>) {
     //if (debug) printMethod("variablesBlock")
     if (token.value != "variables") {
       throw Error("reject")
@@ -71,7 +85,11 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       throw Error("reject")
     }
     nextToken()
-    variableDefinitions()
+    val inVariables = mutableListOf<Variable>()
+    val oVariables = mutableListOf<Variable>()
+    variableDefinitions(inVariables, oVariables)
+    outVariables.clear()
+    outVariables.addAll(oVariables)
     if (token.value != "rcparen") {
       throw Error("reject")
     }
@@ -82,29 +100,41 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
     nextToken()
   }
 
-  private fun variableDefinitions() {
+  private fun variableDefinitions(inVariables: MutableList<Variable>, outVariables: MutableList<Variable>) {
     //if (debug) printMethod("variableDefinitions")
     if (token.value == "var") {
-      variableDef()
+      val oVariables = mutableListOf<Variable>()
+      variableDef(inVariables, oVariables)
+      outVariables.clear()
+      outVariables.addAll(oVariables)
+    } else {
+      outVariables.clear()
+      outVariables.addAll(inVariables)
     }
   }
 
-  private fun variableDef() {
+  private fun variableDef(inVariables: MutableList<Variable>, outVariables: MutableList<Variable>) {
     //if (debug) printMethod("variableDef")
+    val variable = Variable("", null)
+    variable.name = token.lexeme
     nextToken()
     if (token.value != "as") {
       throw Error("reject")
     }
     nextToken()
-    typeDef()
+    typeDef(variable)
+    inVariables.add(variable)
     if (token.value != "comma") {
       throw Error("reject")
     }
     nextToken()
-    variableDefinitions()
+    val oVariables = mutableListOf<Variable>()
+    variableDefinitions(inVariables, oVariables)
+    outVariables.clear()
+    outVariables.addAll(oVariables)
   }
 
-  private fun typeDef() {
+  private fun typeDef(variable: Variable) {
     //if (debug) printMethod("typeDef")
     if (token.value == "rk_float") {
       nextToken()
@@ -115,6 +145,7 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       if (token.value != "float") {
         throw Error("reject")
       }
+      variable.value = token.lexeme.toFloat()
       nextToken()
     } else if (token.value == "rk_string") {
       nextToken()
@@ -125,13 +156,14 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       if (token.value != "string") {
         throw Error("reject")
       }
+      variable.value = token.lexeme
       nextToken()
     } else {
       throw Error("reject")
     }
   }
 
-  private fun roadsBlock() {
+  private fun roadsBlock(roads: MutableList<Road>, inVariables: MutableList<Variable>) {
     //if (debug) printMethod("roadsBlock")
     if (token.value != "roads") {
       throw Error("reject")
@@ -145,7 +177,9 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       throw Error("reject")
     }
     nextToken()
-    roadDefinitions()
+    val outRoads = mutableListOf<Road>()
+    val inRoads = mutableListOf<Road>()
+    roadDefinitions(inRoads, outRoads, inVariables)
     if (token.value != "rcparen") {
       throw Error("reject")
     }
@@ -154,22 +188,45 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       throw Error("reject")
     }
     nextToken()
+    roads.clear()
+    roads.addAll(outRoads)
   }
 
-  private fun roadDefinitions() {
+  private fun roadDefinitions(inRoads: MutableList<Road>, outRoads: MutableList<Road>, inVariables: MutableList<Variable>) {
     //if (debug) printMethod("roadDefinitions")
     if (token.value == "var" || token.value == "string") {
-      roadDef()
+      val oRoads = mutableListOf<Road>()
+      roadDef(inRoads, oRoads, inVariables)
+      outRoads.clear()
+      outRoads.addAll(oRoads)
+    } else {
+      outRoads.clear()
+      outRoads.addAll(inRoads)
     }
   }
 
-  private fun roadDef() {
+  private fun roadDef(inRoads: MutableList<Road>, outRoads: MutableList<Road>, inVariables: MutableList<Variable>) {
     //if (debug) printMethod("roadDef")
+
+    val name = if(token.value == "var") {
+      val variable = inVariables.find { it.name == token.lexeme }
+      if(variable?.value !is String) {
+        throw Error("reject")
+      }
+      variable.value.toString()
+    } else {
+      token.lexeme
+    }
     nextToken()
     if (token.value != "as") {
       throw Error("reject")
     }
     nextToken()
+    // TODO: Check if Polygons are necessary for roads
+    // TODO: Delete 3 lines below
+    if(token.value != "line") {
+      throw Error("reject")
+    }
     featureType()
     if (token.value != "arrow") {
       throw Error("reject")
@@ -179,7 +236,9 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       throw Error("reject")
     }
     nextToken()
-    pointList()
+    val points = mutableListOf<Point>()
+    pointList(points, inVariables)
+    val road = Road(name, points)
     if (token.value != "rsparen") {
       throw Error("reject")
     }
@@ -188,10 +247,14 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       throw Error("reject")
     }
     nextToken()
-    roadDefinitions()
+    inRoads.add(road)
+    val oRoads = mutableListOf<Road>()
+    roadDefinitions(inRoads, oRoads, inVariables)
+    outRoads.clear()
+    outRoads.addAll(oRoads)
   }
 
-  private fun estatesBlock() {
+  private fun estatesBlock(estates: MutableList<Estate>, inVariables: MutableList<Variable>) {
     //if (debug) printMethod("estatesBlock")
     if (token.value != "estates") {
       throw Error("reject")
@@ -205,7 +268,9 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       throw Error("reject")
     }
     nextToken()
-    estateDefinitions()
+    val outEstates = mutableListOf<Estate>()
+    val inEstates = mutableListOf<Estate>()
+    estateDefinitions(inEstates, outEstates, inVariables)
     if (token.value != "rcparen") {
       throw Error("reject")
     }
@@ -214,22 +279,44 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       throw Error("reject")
     }
     nextToken()
+    estates.clear()
+    estates.addAll(outEstates)
   }
 
-  private fun estateDefinitions() {
+  private fun estateDefinitions(inEstates: MutableList<Estate>, outEstates: MutableList<Estate>, inVariables: MutableList<Variable>) {
     //if (debug) printMethod("estateDefinitions")
     if (token.value == "var" || token.value == "string") {
-      estateDef()
+      val oEstates = mutableListOf<Estate>()
+      estateDef(inEstates, oEstates, inVariables)
+      outEstates.clear()
+      outEstates.addAll(oEstates)
+    } else {
+      outEstates.clear()
+      outEstates.addAll(inEstates)
     }
   }
 
-  private fun estateDef() {
+  private fun estateDef(inEstates: MutableList<Estate>, outEstates: MutableList<Estate>, inVariables: MutableList<Variable>) {
     //if (debug) printMethod("estateDef")
+    val name = if(token.value == "var") {
+          val variable = inVariables.find { it.name == token.lexeme }
+          if(variable?.value !is String) {
+            throw Error("reject")
+          }
+          variable.value.toString()
+        } else {
+          token.lexeme
+        }
     nextToken()
     if (token.value != "as") {
       throw Error("reject")
     }
     nextToken()
+    // TODO: Check if Polygons are necessary for roads
+    // TODO: Delete 3 lines below
+    if(token.value != "polygon") {
+      throw Error("reject")
+    }
     featureType()
     if (token.value != "arrow") {
       throw Error("reject")
@@ -239,7 +326,9 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       throw Error("reject")
     }
     nextToken()
-    pointList()
+    val points = mutableListOf<Point>()
+    pointList(points, inVariables)
+    val estate = Estate(name, points)
     if (token.value != "rsparen") {
       throw Error("reject")
     }
@@ -248,7 +337,11 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       throw Error("reject")
     }
     nextToken()
-    estateDefinitions()
+    inEstates.add(estate)
+    val oEstates = mutableListOf<Estate>()
+    estateDefinitions(inEstates, oEstates, inVariables)
+    outEstates.clear()
+    outEstates.addAll(oEstates)
   }
 
 
@@ -263,22 +356,39 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
     }
   }
 
-  private fun pointList() {
+  private fun pointList(outPoints: MutableList<Point>, inVariables: MutableList<Variable>) {
     //if (debug) printMethod("pointList")
-    point()
-    point()
-    additionalPoints()
+    val pointOne = Point(0.0f, 0.0f)
+    val pointTwo = Point(0.0f, 0.0f)
+    val otherPoints = mutableListOf<Point>()
+    val inPoints = mutableListOf<Point>()
+    point(pointOne, inVariables)
+    point(pointTwo, inVariables)
+    additionalPoints(otherPoints, inVariables, inPoints)
+
+    outPoints.add(pointOne)
+    outPoints.add(pointTwo)
+    outPoints.addAll(otherPoints)
   }
 
-  private fun additionalPoints() {
+  private fun additionalPoints(
+    otherPoints: MutableList<Point>,
+    inVariables: MutableList<Variable>,
+    inPoints: MutableList<Point>
+  ) {
     //if (debug) printMethod("additionalPoints")
     if (token.value == "point") {
-      point()
-      additionalPoints()
+      val point = Point(0.0f, 0.0f)
+      point(point, inVariables)
+      inPoints.add(point)
+      additionalPoints(otherPoints, inVariables, inPoints)
+    } else {
+      otherPoints.clear()
+      otherPoints.addAll(inPoints)
     }
   }
 
-  private fun point() {
+  private fun point(point: Point, inVariables: MutableList<Variable>) {
     //if (debug) printMethod("point")
     if (token.value != "point") {
       throw Error("reject")
@@ -288,12 +398,16 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
       throw Error("reject")
     }
     nextToken()
-    pointArg()
+    val x = Variable("x", 0.0f)
+    pointArg(x, inVariables)
+    point.x = x.value as Float
     if (token.value != "comma") {
       throw Error("reject")
     }
     nextToken()
-    pointArg()
+    val y = Variable("y", 0.0f)
+    pointArg(y, inVariables)
+    point.y = y.value as Float
     if (token.value != "rparen") {
       throw Error("reject")
     }
@@ -304,11 +418,17 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream/
     nextToken()
   }
 
-  private fun pointArg() {
+  private fun pointArg(x: Variable, inVariables: MutableList<Variable>) {
     //if (debug) printMethod("pointArg")
     if (token.value == "var") {
+      val variable = inVariables.find { it.name == token.lexeme }
+      if(variable?.value !is Float) {
+        throw Error("reject")
+      }
+      x.value = variable.value
       nextToken()
     } else if (token.value == "float") {
+      x.value = token.lexeme.toFloat()
       nextToken()
     } else {
       throw Error("reject")

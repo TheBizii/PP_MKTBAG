@@ -1,11 +1,13 @@
 city -> "Maribor",
 variables -> {
-	p as Float -> 15.680137995752073,
-	q as Float -> 46.52991523307189,
 	GospCesta as String -> "Gosposvetska cesta",
 },
 roads -> {
-	GospCesta as Line -> [],
+	"562354632" as Line -> [
+		point(p, 46.529929315047326),
+		point(15.680176144867575, q),
+		point(15.680216237938481, 46.52990023983958),
+	],
 },
 estates -> {
 },
