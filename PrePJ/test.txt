@@ -1,6 +1,30 @@
-stevilo := 10;
-fakulteta:=1;
-for i := 0 to stevilo - 1 do
-     fakulteta:= fakulteta * i
-done;
-WRITE fakulteta
+city -> "Maribor",
+variables -> {
+	p as Float -> 15.680137995752073,
+	q as Float -> 46.52991523307189,
+	GospCesta as String -> "Gosposvetska cesta",
+},
+roads -> {
+	GospCesta as Line -> [
+		point(p, 46.529929315047326),
+		point(15.680176144867575, q),
+		point(15.680216237938481, 46.52990023983958),
+	],
+	"Ljubljanska cesta" as Line -> [
+		point(15.680137995752073, 46.529929315047326),
+		point(15.680176144867575, 46.52991523307189),
+		point(15.680216237938481, 46.52990023983958),
+	],
+},
+estates -> {
+	"22324426" as Polygon -> [
+		point(15.680137995752073, 46.529929315047326),
+		point(p, q),
+		point(15.680216237938481, 46.52990023983958),
+	],
+	"22324442" as Polygon -> [
+		point(15.680137995752073, 46.529929315047326),
+		point(15.680176144867575, 46.52991523307189),
+		point(15.680216237938481, 46.52990023983958),
+	],
+},
