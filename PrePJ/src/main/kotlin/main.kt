@@ -169,9 +169,12 @@ object Example : Automaton {
     /* END OF COMMA */
 
     /* VARIABLE IDENTIFIER */
-    setTransition(1, 65..75, 61)
+    // 70, 76, 80, 83
+    setTransition(1, 65..69, 61)
+    setTransition(1, 71..75, 61)
     setTransition(1, 77..79, 61)
-    setTransition(1, 81..90, 61)
+    setTransition(1, 81..82, 61)
+    setTransition(1, 84..90, 61)
     setTransition(1, 'b', 61)
     setTransition(1, 'd', 61)
     setTransition(1, 102..111, 61)
