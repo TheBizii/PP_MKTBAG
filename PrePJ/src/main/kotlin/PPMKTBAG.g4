@@ -27,7 +27,7 @@ featureType: 'Line' | 'Polygon';
 
 pointList: point point additionalPoints;
 point: 'point' '(' pointArg ',' pointArg ')' ',';
-additionalPoints: point | ;
+additionalPoints: point additionalPoints | ;
 pointArg: VAR | FLOAT;
 
 

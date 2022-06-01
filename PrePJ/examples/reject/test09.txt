@@ -1,0 +1,11 @@
+city -> "Maribor",
+variables -> {
+	p as Float -> 15.680137995752073,
+	q as Float -> 46.52991523307189,
+	GospCesta as String -> "Gosposvetska cesta",
+},
+roads -> {
+	GospCesta as Line -> [],
+},
+estates -> {
+},
