@@ -25,13 +25,13 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
   }
 
   private fun start() {
-    if (debug) println("start")
+    if (debug) printMethod("start")
     cityDef()
     defintionBlocks()
   }
 
   private fun cityDef() {
-    if (debug) println("cityDef")
+    if (debug) printMethod("cityDef")
     if (token.value != "city") {
       throw Error("reject")
     }
@@ -51,14 +51,14 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
   }
 
   private fun defintionBlocks() {
-    if (debug) println("definitionBlocks")
+    if (debug) printMethod("definitionBlocks")
     variablesBlock()
     roadsBlock()
     estatesBlock()
   }
 
   private fun variablesBlock() {
-    if (debug) println("variablesBlock")
+    if (debug) printMethod("variablesBlock")
     if (token.value != "variables") {
       throw Error("reject")
     }
@@ -83,14 +83,14 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
   }
 
   private fun variableDefinitions() {
-    if (debug) println("variableDefinitions")
+    if (debug) printMethod("variableDefinitions")
     if (token.value == "var") {
       variableDef()
     }
   }
 
   private fun variableDef() {
-    if (debug) println("variableDef")
+    if (debug) printMethod("variableDef")
     nextToken()
     if (token.value != "as") {
       throw Error("reject")
@@ -105,7 +105,7 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
   }
 
   private fun typeDef() {
-    if (debug) println("typeDef")
+    if (debug) printMethod("typeDef")
     if (token.value == "rk_float") {
       nextToken()
       if (token.value != "arrow") {
@@ -132,7 +132,7 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
   }
 
   private fun roadsBlock() {
-    if (debug) println("roadsBlock")
+    if (debug) printMethod("roadsBlock")
     if (token.value != "roads") {
       throw Error("reject")
     }
@@ -157,14 +157,14 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
   }
 
   private fun roadDefinitions() {
-    if (debug) println("roadDefinitions")
+    if (debug) printMethod("roadDefinitions")
     if (token.value == "var" || token.value == "string") {
       roadDef()
     }
   }
 
   private fun roadDef() {
-    if (debug) println("roadDef")
+    if (debug) printMethod("roadDef")
     nextToken()
     if (token.value != "as") {
       throw Error("reject")
@@ -192,7 +192,7 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
   }
 
   private fun estatesBlock() {
-    if (debug) println("estatesBlock")
+    if (debug) printMethod("estatesBlock")
     if (token.value != "estates") {
       throw Error("reject")
     }
@@ -217,14 +217,14 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
   }
 
   private fun estateDefinitions() {
-    if (debug) println("estateDefinitions")
+    if (debug) printMethod("estateDefinitions")
     if (token.value == "var" || token.value == "string") {
       estateDef()
     }
   }
 
   private fun estateDef() {
-    if (debug) println("estateDef")
+    if (debug) printMethod("estateDef")
     nextToken()
     if (token.value != "as") {
       throw Error("reject")
@@ -253,7 +253,7 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
 
 
   private fun featureType() {
-    if (debug) println("featureType")
+    if (debug) printMethod("featureType")
     if (token.value == "line") {
       nextToken()
     } else if (token.value == "polygon") {
@@ -264,21 +264,22 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
   }
 
   private fun pointList() {
-    if (debug) println("pointList")
+    if (debug) printMethod("pointList")
     point()
     point()
     additionalPoints()
   }
 
   private fun additionalPoints() {
-    if (debug) println("additionalPoints")
+    if (debug) printMethod("additionalPoints")
     if (token.value == "point") {
       point()
+      additionalPoints()
     }
   }
 
   private fun point() {
-    if (debug) println("point")
+    if (debug) printMethod("point")
     if (token.value != "point") {
       throw Error("reject")
     }
@@ -304,7 +305,7 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
   }
 
   private fun pointArg() {
-    if (debug) println("pointArg")
+    if (debug) printMethod("pointArg")
     if (token.value == "var") {
       nextToken()
     } else if (token.value == "float") {
@@ -363,5 +364,9 @@ class Scanner(private val automaton: Automaton, private val stream: InputStream,
   private fun nextToken() {
     token = getToken()
     if (debug) println(token.value)
+  }
+
+  private fun printMethod(smth:String) {
+    println("METHOD: $smth")
   }
 }
