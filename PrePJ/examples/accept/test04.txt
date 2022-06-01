@@ -1,0 +1,11 @@
+city -> "Maribor",
+variables -> {
+},
+roads -> {
+	"Gosposvetska cesta" as Line -> [
+		point(46.529929315047326, 46.529929315047326),
+		point(15.680176144867575, 15.680176144867575),
+	],
+},
+estates -> {
+},

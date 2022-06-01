@@ -1,0 +1,4 @@
+city -> Maribor,
+variables -> {},
+roads -> {},
+estates -> {},

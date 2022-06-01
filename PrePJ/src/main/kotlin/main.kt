@@ -539,17 +539,14 @@ object Example : Automaton {
   }
 }
 
-fun printTokens(scanner: Scanner) {
-  val token = scanner.getToken()
-  print("${token.value}(\"${token.lexeme}\") ")
-  printTokens(scanner)
-}
-
 fun main(args: Array<String>) {
-  val debug = if (args.size > 1) {
-    args[1].toBoolean();
+  /*val debug = if (args.size > 1) {
+    args[1].toBoolean()
   } else {
     false
+  }*/
+
+  for (file in args) {
+    Scanner(Example, File(file).inputStream()/*, debug*/)
   }
-  Scanner(Example, File(args[0]).inputStream(), debug)
 }
