@@ -14,6 +14,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test-junit"))
+    implementation("de.grundid.opendatalab:geojson-jackson:1.14")
+
 }
 
 tasks.test {
