@@ -27,4 +27,17 @@ class RoadController extends Controller
     {
         return Road::all();
     }
+
+    public function store(Request $request)
+    {
+        $road = new Road();
+        $data = json_decode($request->input("geoData"), true);
+        //return response()->json($data["crs"]);
+        $road->type = $data["type"];
+        $road->name = "roads";
+        $road->crs = $data["crs"];
+        $road->features = $data["features"];
+        $road->save();
+        return response()->json($road);
+    }
 }
