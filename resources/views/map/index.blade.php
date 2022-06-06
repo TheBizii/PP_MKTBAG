@@ -10,6 +10,18 @@
                 <div class="col-md-auto">
                     <div>
                         <div id="map" style="width:1000px; height:800px;"></div>
+                        <form class="form-inline">
+                            <label>Action type &nbsp;</label>
+                            <select id="type" class="form-control">
+                                <option value="click1" selected>Track layout 1</option>
+                                <option value="click2">Track layout 2</option>
+                                <option value="click3">Track layout 3</option>
+                                <option value="click4">Track layout 4</option>
+                                <option value="click5">Track layout 5</option>
+                                <option value="none">None</option>
+                            </select>
+                            <span id="status">&nbsp;0 selected features</span>
+                        </form>
                         <script type="text/javascript">
                             console.log(ol)
                             const estates = {!! $estate !!}[0];
@@ -41,7 +53,7 @@
                                 'MultiLineString': new ol.style.Style({
                                     stroke: new ol.style.Stroke({
                                         color: 'green',
-                                        width: 1,
+                                        width: 3,
                                     }),
                                 }),
                                 'MultiPoint': new ol.style.Style({
@@ -128,6 +140,89 @@
                                     zoom: 13,
                                 }),
                             });
+
+                            let select = null;
+                            const selected = new ol.style.Style({
+                                fill: new ol.style.Fill({
+                                    color: '#ff0000',
+                                }),
+                                stroke: new ol.style.Stroke({
+                                    color: 'rgb(255,0,0)',
+                                    width: 4,
+                                }),
+                            });
+
+                            function selectStyle(feature) {
+                                const color = feature.get('COLOR') || '#ff0000';
+                                selected.getFill().setColor(color);
+                                return selected;
+                            }
+                            const selectClick1 = new ol.interaction.Select({
+                                condition: ol.events.condition.click,
+                                style: selectStyle,
+                            });
+                            const selectClick2 = new ol.interaction.Select({
+                                condition: ol.events.condition.click,
+                                style: selectStyle,
+                            });
+                            const selectClick3 = new ol.interaction.Select({
+                                condition: ol.events.condition.click,
+                                style: selectStyle,
+                            });
+                            const selectClick4 = new ol.interaction.Select({
+                                condition: ol.events.condition.click,
+                                style: selectStyle,
+                            });
+                            const selectClick5 = new ol.interaction.Select({
+                                condition: ol.events.condition.click,
+                                style: selectStyle,
+                            });
+                            const selectElement = document.getElementById('type');
+
+                            const changeInteraction = function () {
+                                if (select !== null) {
+                                    map.removeInteraction(select);
+                                }
+                                let value = selectElement.value;
+                                if (value === 'click1') {
+                                    select = selectClick1;
+                                } else if (value === 'click2') {
+                                    select = selectClick2;
+                                } else if (value === 'click3') {
+                                    select = selectClick3;
+                                } else if (value === 'click4') {
+                                    select = selectClick4;
+                                } else if (value === 'click5') {
+                                    select = selectClick5;
+                                } else {
+                                    select = null;
+                                }
+                                if (select !== null) {
+                                    map.addInteraction(select);
+                                    select.on('select', function (e) {
+                                        document.getElementById('status').innerHTML = '&nbsp;' +
+                                            e.target.getFeatures().getLength() +
+                                            ' selected features (last operation selected ' + e.selected.length +
+                                            ' and deselected ' + e.deselected.length + ' features)';
+                                    });
+                                }
+                            };
+
+                            selectElement.onchange = changeInteraction;
+                            changeInteraction();
+
+                            /*this.selectType = (mapBrowserEvent) => {
+                                return ol.events.condition.singleClick(mapBrowserEvent) ||
+                                    ol.events.condition.doubleClick(mapBrowserEvent);
+                            }
+
+                            this.selectInteraction = new ol.interaction.Select({
+                                condition: this.selectType,
+                                toggleCondition: ol.events.condition.shiftKeyOnly,
+                                layers: this.layerFilter,
+                                features: this.features,
+                                style: this.selectStyle,
+                            });*/
                             //(15.645, 46.55)
                         </script>
                     </div>
