@@ -22,7 +22,11 @@
                             </select>
                             <span id="status">&nbsp;0 selected features</span>
                         </form>
-                        <script type="text/javascript">
+                        <button id="download-geojson">Export</button>
+                        <form class="form-inline">
+                            <input type="file" id="import">
+                        </form>
+                        <script type="text/javascript" defer>
                             console.log(ol)
                             const estates = {!! $estate !!}[0];
                             const roads = {!! $road !!}[0];
@@ -137,7 +141,7 @@
                                 view: new ol.View({
                                     projection: 'EPSG:4326',
                                     center: [15.645, 46.55],
-                                    zoom: 13,
+                                    zoom: 15,
                                 }),
                             });
 
@@ -179,7 +183,9 @@
                             });
                             const selectElement = document.getElementById('type');
 
+                            let selectedTrackLayout = {"click1":"","click2":"","click3":"","click4":"","click5":""};
                             const changeInteraction = function () {
+                                console.log(selectedTrackLayout)
                                 if (select !== null) {
                                     map.removeInteraction(select);
                                 }
@@ -198,8 +204,18 @@
                                     select = null;
                                 }
                                 if (select !== null) {
+                                    console.log(select)
                                     map.addInteraction(select);
                                     select.on('select', function (e) {
+                                        if (e.selected.length === 0) {
+                                            console.log("NO FEATURES SELECTED")
+                                            return
+                                        }
+                                        console.log(e.selected)
+                                        selectedTrackLayout[value] = new ol.format.GeoJSON().writeFeatures(e.selected, {
+                                            dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'
+                                        });
+                                        console.log(selectedTrackLayout)
                                         document.getElementById('status').innerHTML = '&nbsp;' +
                                             e.target.getFeatures().getLength() +
                                             ' selected features (last operation selected ' + e.selected.length +
@@ -210,6 +226,64 @@
 
                             selectElement.onchange = changeInteraction;
                             changeInteraction();
+
+                            document.getElementById('download-geojson')
+                                .addEventListener('click', function () {
+                                    const a = document.createElement("a");
+                                    const blob = new Blob([JSON.stringify(selectedTrackLayout)], {type: 'text/plain'});
+                                    a.href = URL.createObjectURL(blob);
+                                    a.download = "traclayouts.geojson";
+                                    a.click();
+                                });
+
+                            const inputElement = document.getElementById('import');
+                            inputElement.onchange = async function (event) {
+                                var fileList = inputElement.files;
+                                for (const file of fileList) {
+                                    const fileParsed = JSON.parse(await file.text())
+                                    for (const index in fileParsed){
+                                        if (fileParsed[index] === "") {
+                                            continue
+                                        }
+                                        const parsed = JSON.parse(fileParsed[index]).features[0]
+                                        //console.log(roadsLayer.getSource())
+                                        //var fakeOnSelectEvent = new ol.interaction.Select.Event(ol.interaction.Select.EventType.SELECT, [], [], false);
+                                        const collection = new ol.Collection(parsed);
+                                        const newSelect = new ol.interaction.Select({
+                                            condition: ol.events.condition.click,
+                                            features: collection,
+                                            style: selectStyle,
+                                        });
+                                        map.addInteraction(newSelect);
+                                        console.log("Dispatching")
+                                        newSelect.on('select', function (e) {
+                                            console.log(e.selected)
+                                            if (e.selected.length === 0) {
+                                                console.log("NO FEATURES SELECTED")
+                                                return
+                                            }
+                                            selectedTrackLayout["click1"] = new ol.format.GeoJSON().writeFeatures(e.selected);
+                                            console.log(selectedTrackLayout)
+                                            document.getElementById('status').innerHTML = '&nbsp;' +
+                                                e.target.getFeatures().getLength() +
+                                                ' selected features (last operation selected ' + e.selected.length +
+                                                ' and deselected ' + e.deselected.length + ' features)';
+                                        });
+                                        newSelect.dispatchEvent({
+                                           type: 'select',
+                                           selected: [collection],
+                                           deselected: []
+                                        });
+
+
+
+                                        /*for(const road of roadsLayer.getSource().getFeatures()) {
+                                            console.log(road.getGeometry())
+                                        }*/
+                                        //map.dispatchEvent ({ type: 'singleClick', coordinate: JSON.parse(fileParsed[index]), pixel: pixel })
+                                    }
+                                }
+                            }
 
                             /*this.selectType = (mapBrowserEvent) => {
                                 return ol.events.condition.singleClick(mapBrowserEvent) ||
